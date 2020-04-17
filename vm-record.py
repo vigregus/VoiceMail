@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import ari
 import logging
 import time
@@ -50,7 +51,7 @@ class VoiceMailCall(object):
                                           recording_state)
         self.state_machine.start(recording_state)
 
- def stasis_start_cb(channel_obj,event):
+def stasis_start_cb(channel_obj,event):
     channel = channel_obj['channel']
     channel_name = channel.json.get('name')
     mailbox = event.get('args')[0]

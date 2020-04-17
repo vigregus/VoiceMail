@@ -1,7 +1,7 @@
 class StateMachine(object):
     def __init__(self):
-        self.transitionns = {}
-        self.current_state = none
+        self.transitions = {}
+        self.current_state = None
 
     def add_transition(self,src_state,event,dst_state):
         if not self.transitions.get(src_state.state_name):
