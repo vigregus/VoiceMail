@@ -12,6 +12,7 @@ from recording_state import RecordingState
 from ending_state import EndingState
 from hungup_state import HungUpState
 from reviewing_state import ReviewingState
+from greeting_state import GreetingState
 
 #As we add more states to our state machine , we will import the necessary
 #state here
@@ -35,21 +36,27 @@ class VoiceMailCall(object):
         recording_state = RecordingState(self)
         ending_state = EndingState(self)
         reviewing_state = ReviewingState(self)
+        greeting_state = GreetingState(self)
 
         self.state_machine = StateMachine()
         self.state_machine.add_transition(recording_state, Event.DTMF_OCTOTHORPE,
-                                          ending_state)
+                                          reviewing_state)
         self.state_machine.add_transition(recording_state, Event.HANGUP,
                                           hungup_state)
-        self.state_machine.add_transition(recording_state, Event.DTMF_STAR,recording_state)
-
+        self.state_machine.add_transition(recording_state, Event.DTMF_STAR,
+                                          recording_state)
         self.state_machine.add_transition(reviewing_state, Event.HANGUP,
                                           hungup_state)
         self.state_machine.add_transition(reviewing_state, Event.DTMF_OCTOTHORPE,
                                           ending_state)
         self.state_machine.add_transition(reviewing_state, Event.DTMF_STAR,
                                           recording_state)
-        self.state_machine.start(recording_state)
+        self.state_machine.add_transition(greeting_state, Event.HANGUP,
+                                          hungup_state)
+        self.state_machine.add_transition(greeting_state,
+                                          Event.PLAYBACK_COMPLETE,
+                                          recording_state)
+        self.state_machine.start(greeting_state)
 
 def stasis_start_cb(channel_obj,event):
     channel = channel_obj['channel']
@@ -58,7 +65,7 @@ def stasis_start_cb(channel_obj,event):
 
     print("Channel {0} recording voicemail for {1}".format(channel_name,mailbox))
     channel.answer()
-    VoiceMailCall(client,channel,mailbox)
+    VoiceMailCall(client, channel, mailbox)
 
 client.on_channel_event('StasisStart', stasis_start_cb)
 client.run(apps=sys.argv[1])
