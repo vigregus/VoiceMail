@@ -16,4 +16,3 @@ class StateMachine(object):
         self.current_state = initial_state
         self.current_state.enter()
             
-vv
