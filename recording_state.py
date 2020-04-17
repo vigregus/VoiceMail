@@ -12,9 +12,9 @@ class RecordingState(object):
     def enter(self):
         print "Entering recording state"
         self.hangup_event = self.call.channel.on_event('ChannelHangupRequest',self.on_hangup)
-        self.dtmf_event = self.call.channel.on_event('ChannelDtmfRecieved',self.on_dtmf)
+#        self.dtmf_event = self.call.channel.on_event('ChannelDtmfRecieved',self.on_dtmf)
         self.recording = self.call.channel.record(name=self.call.vm_path,format='wav',beep=True,ifExists='overwrite')
-        print "Recording voicemail at {0}.format(self.call.vm_path)"
+        print "Recording voicemail at {0}".format(self.call.vm_path)
 
     def cleanup(self):
         print "Cleaning up event handlers"
