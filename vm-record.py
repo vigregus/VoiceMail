@@ -23,10 +23,10 @@ LOGGER = logging.getLogger(__name__)
 client = ari.connect('http://localhost:8088','asterisk','618553')
 
 class VoiceMailCall(object):
-    def __init__(self,ari_client, channel, mailbox):
+    def __init__(self, ari_client, channel, mailbox):
         self.client = ari_client
         self.channel = channel
-        self.vm_path = os.path.join('voicemail','mailbox',str(time.time()))
+        self.vm_path = time.time()
         self.setup_state_machine()
 
     def setup_state_machine(self):
