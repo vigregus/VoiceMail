@@ -12,7 +12,7 @@ class RecordingState(object):
     def enter(self):
         print "Entering recording state"
         self.hangup_event = self.call.channel.on_event('ChannelHangupRequest',self.on_hangup)
-#        self.dtmf_event = self.call.channel.on_event('ChannelDtmfRecieved',self.on_dtmf)
+	self.dtmf_event = self.call.channel.on_event('ChannelDtmfReceived', self.on_dtmf)
         self.recording = self.call.channel.record(name=self.call.vm_path,format='wav',beep=True,ifExists='overwrite')
         print "Recording voicemail at {0}".format(self.call.vm_path)
 
@@ -28,8 +28,8 @@ class RecordingState(object):
 
     def on_dtmf(self,channel,event):
         digit = event.get('digit')
-        if degit =='#':
-            rec_name = self.recording.fson.get('name')
+        if digit =='#':
+            rec_name = self.recording.json.get('name')
             print "Accepted recording {0} on DTMF #".format(rec_name)
             self.cleanup()
             self.recording.stop()

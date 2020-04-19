@@ -7,7 +7,7 @@ class ReviewingState(object):
         self.call = call
         self.playback_id = None
         self.hangup_event = None
-        self.playbach_finished = None
+        self.playback_finished = None
         self.dtmf_event = None
         self.playback = None
 

@@ -39,7 +39,7 @@ class VoiceMailCall(object):
         greeting_state = GreetingState(self)
 
         self.state_machine = StateMachine()
-        self.state_machine.add_transition(recording_state, Event.DTMF_OCTOTHORPE,
+	self.state_machine.add_transition(recording_state, Event.DTMF_OCTOTHORPE,
                                           reviewing_state)
         self.state_machine.add_transition(recording_state, Event.HANGUP,
                                           hungup_state)
@@ -51,12 +51,13 @@ class VoiceMailCall(object):
                                           ending_state)
         self.state_machine.add_transition(reviewing_state, Event.DTMF_STAR,
                                           recording_state)
-        self.state_machine.add_transition(greeting_state, Event.HANGUP,
-                                          hungup_state)
-        self.state_machine.add_transition(greeting_state,
-                                          Event.PLAYBACK_COMPLETE,
-                                          recording_state)
-        self.state_machine.start(greeting_state)
+        self.state_machine.start(recording_state)
+#        self.state_machine.add_transition(greeting_state, Event.HANGUP,
+#                                          hungup_state)
+#        self.state_machine.add_transition(greeting_state,
+#                                          Event.PLAYBACK_COMPLETE,
+#                                          recording_state)
+#        self.state_machine.start(greeting_state)
 
 def stasis_start_cb(channel_obj,event):
     channel = channel_obj['channel']
