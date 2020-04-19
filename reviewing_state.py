@@ -3,11 +3,11 @@ import uuid
 class ReviewingState(object):
     state_name = "reviewing"
 
-    def __init__(self,call):
+    def __init__(self, call):
         self.call = call
         self.playback_id = None
         self.hangup_event = None
-        self.playbach_finished = None
+        self.playback_finished = None
         self.dtmf_event = None
         self.playback = None
 
@@ -26,16 +26,16 @@ class ReviewingState(object):
         self.dtmf_event.close()
         self.hangup_event.close()
 
-    def on_hangup(self,channel,event):
+    def on_hangup(self, channel, event):
         print "Accepted recording {0} on hangup".format(self.call.vm_path)
         self.cleanup()
         self.call.state_machine.change_state(Event.HANGUP)
 
-    def on_playback_finished(self,event):
+    def on_playback_finished(self, event):
         if self.playback_id == event.get('playback').get('id'):
             self.playback = None
 
-    def on_dtmf(self,channel,event):
+    def on_dtmf(self, channel, event):
         digit = event.get('digit')
         if digit == '#':
             print "Accepted recording {0} on DTMF #".format(self.call.vm_path)
