@@ -26,8 +26,7 @@ class VoiceMailCall(object):
     def __init__(self,ari_client, channel, mailbox):
         self.client = ari_client
         self.channel = channel
-#        self.vm_path = os.path.join('voicemail','mailbox',str(time.time()))
-        self.vm_path = str(time.time())
+        self.vm_path = os.path.join('voicemail','mailbox',str(time.time()))
         self.setup_state_machine()
 
     def setup_state_machine(self):
@@ -41,7 +40,7 @@ class VoiceMailCall(object):
 
         self.state_machine = StateMachine()
         self.state_machine.add_transition(recording_state, Event.DTMF_OCTOTHORPE,
-                                          ending_state)
+                                          reviewing_state)
         self.state_machine.add_transition(recording_state, Event.HANGUP,
                                           hungup_state)
         self.state_machine.add_transition(recording_state, Event.DTMF_STAR,
@@ -51,15 +50,13 @@ class VoiceMailCall(object):
         self.state_machine.add_transition(reviewing_state, Event.DTMF_OCTOTHORPE,
                                           ending_state)
         self.state_machine.add_transition(reviewing_state, Event.DTMF_STAR,
-                                        recording_state)
+                                          recording_state)
         self.state_machine.add_transition(greeting_state, Event.HANGUP,
-                                         hungup_state)
-        self.state_machine.add_transition(greeting_state, Event.PLAYBACK_COMPLETE, recording_state)
+                                          hungup_state)
+        self.state_machine.add_transition(greeting_state,
+                                          Event.PLAYBACK_COMPLETE,
+                                          recording_state)
         self.state_machine.start(greeting_state)
-#        self.state_machine.start(recording_state)
-
-
-
 
 def stasis_start_cb(channel_obj,event):
     channel = channel_obj['channel']
